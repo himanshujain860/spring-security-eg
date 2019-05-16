@@ -13,6 +13,7 @@ import org.springframework.web.context.request.WebRequest;
 @SuppressWarnings({"unchecked","rawtypes"})
 @ControllerAdvice
 public class CustomExceptionHandler {
+
     @ExceptionHandler(ServletRequestBindingException.class)
     public final ResponseEntity<Object> handleHeaderException(Exception ex, WebRequest request) {
         List<String> details = new ArrayList<>();

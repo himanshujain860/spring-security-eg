@@ -1,6 +1,5 @@
 package com.app.security.rest.controllers;
 
-import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import com.app.security.rest.models.Employee;
 @RestController
 @RequestMapping(path = "/employees")
 public class EmployeeController {
+
     @Autowired
     private EmployeeDAO employeeDao;
     
@@ -25,7 +25,7 @@ public class EmployeeController {
     }
     
     @PostMapping(path= "/", consumes = "application/json", produces = "application/json")
-    public Employee addEmployee(@RequestBody Employee employee) throws Exception {
+    public Employee addEmployee(@RequestBody Employee employee) {
         Integer id = employeeDao.getAllEmployees().size() + 1;
         employee.setId(id);
         employeeDao.addEmployee(employee);

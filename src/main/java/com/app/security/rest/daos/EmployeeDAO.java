@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public class EmployeeDAO {
+
     private static List<Employee> list = new ArrayList<>();
     
     static {
