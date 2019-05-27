@@ -9,15 +9,26 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/login").permitAll()
-                .anyRequest().authenticated().and().formLogin();
-    }
+    @Autowired
+    private CustomSuccessHandler customSuccessHandler;
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("admin").password("{noop}password").roles("USER");
+    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication().withUser("bill").password("{noop}abc123").roles("USER");
+        auth.inMemoryAuthentication().withUser("admin").password("{noop}root123").roles("ADMIN");
+        auth.inMemoryAuthentication().withUser("dba").password("{noop}root123").roles("ADMIN","DBA");
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+
+        http.authorizeRequests()
+                .antMatchers("/", "/home").permitAll()
+                .antMatchers("/admin/**").access("hasRole('ADMIN')")
+                .antMatchers("/db/**").access("hasRole('ADMIN') and hasRole('DBA')")
+                .and().formLogin().loginPage("/login").successHandler(customSuccessHandler)
+                .usernameParameter("ssoId").passwordParameter("password")
+                .and().csrf()
+                .and().exceptionHandling().accessDeniedPage("/Access_Denied");
     }
 }
