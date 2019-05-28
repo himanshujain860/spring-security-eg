@@ -21,7 +21,7 @@ public class SpringBootDemoApplication {
         SpringApplication.run(SpringBootDemoApplication.class, args);
     }
 
-    @GetMapping(value = { "/", "/home" })
+    @GetMapping(value = "/")
     public String homePage(ModelMap model) {
         model.addAttribute("greeting", "Hi, Welcome to mysite");
         return "welcome";
